@@ -1,0 +1,26 @@
+{
+  "name": "napim-cli",
+  "version": "1.0.0-b",
+  "description": "command line for napim (Node Api Maker)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "napim": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/axmad386/core-api-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "napim"
+  ],
+  "author": "Akhmad Salafudin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/axmad386/core-api-cli/issues"
+  },
+  "homepage": "https://gitlab.com/axmad386/core-api-cli#readme"
+}
