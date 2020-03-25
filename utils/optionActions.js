@@ -1,8 +1,4 @@
-const log = require('../utils/customLog')
-const missingArg = function () {
-    log.warn('WARN: missing argument')
-    log.info('napim -h for more info')
-}
+const log = require('./customLog')
 const help = function () {
     log.info([
         'Node API Maker CLI',
@@ -22,6 +18,8 @@ const help = function () {
     ])
 }
 const version = function () {
-    log.info('Node API Maker version 1.0.0-b')
+    let ver = require('../package.json').version
+    log.info('Node API Maker version ' + ver)
 }
-module.exports = { help, version, missingArg }
+
+module.exports = { help, version }
