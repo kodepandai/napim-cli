@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/axmad386/core-api-cli.git"
+    "url": "git+https://gitlab.com/axmad386/napim-cli.git"
   },
   "keywords": [
     "cli",
@@ -20,7 +20,7 @@
   "author": "Akhmad Salafudin",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/axmad386/core-api-cli/issues"
+    "url": "https://gitlab.com/axmad386/napim-cli/issues"
   },
-  "homepage": "https://gitlab.com/axmad386/core-api-cli#readme"
+  "homepage": "https://gitlab.com/axmad386/napim-cli#readme"
 }
