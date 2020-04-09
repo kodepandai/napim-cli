@@ -7,10 +7,19 @@ const help = function () {
         'email: axmad386@gmail.com',
         '========================='
     ])
-    log.warn('usage  : napim [argument] [option]')
-    log.debug([
+    log.warn([
+        'usage  : napim [argument]',
+        '     or  napim [option]'])
+    log.debug(['',
         'argument   :',
-        '   create [project]      create new api project',
+        '   create [project_name] [-ts?]      create new api project',
+        '                            -ts      typescript mode',
+        '   make:model [model_name]           create model',
+        '   make:service [route] [--method?]  create service',
+        '       example: ',
+        '       make:service /users/:id --post',
+        '       ..will generate /users/post_id.(ts|js)',
+
         '',
         'option   :',
         '   -h | --help     learn how to use this tool',

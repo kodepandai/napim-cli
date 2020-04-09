@@ -33,12 +33,12 @@ if (isOption(args[0])) {
 } else {
     arg = args[0]
     opt = args.filter(x => isOption(x))
-    params = args.filter((x, i) => i > 0 && !isOption(x))
 
 }
 
 let match_option = options.find(o => o.code == opt || o.alias == opt)
 let match_argument = arguments.find(o => o.code == arg)
+params = args.filter((x, i) => i > 0 && x != match_argument.code)
 if (arg == null && match_option) {
     return optionActions[match_option.action]()
 }

@@ -1,22 +1,34 @@
 const log = require('./customLog')
 const path = require('path')
 const { basePath, templatePath } = require('./path')
-const { isEmpty } = require('./functions')
+const { isEmpty, isOption } = require('./functions')
 const fs = require('fs')
-const create = async function ([project_name]) {
+const create = async function (params) {
+    if (params.length > 2 || params.length == 0) {
+        log.warn('invalid argument or option')
+        return log.info('Expected: napim create [project_name] [-ts?]')
+    }
+    if (isOption(params[0])) return log.warn('invalid project name')
+    let project_name = params[0]
+    let option = params.length == 2 && isOption(params[1]) ? params[1] : null
+    if (option != null && option != '-ts') {
+        log.warn('invalid argument or option')
+        return log.info('Expected: napim create [project_name] [-ts?]')
+    }
     let project_path = path.resolve(basePath, project_name)
+    let mode = option ? 'ts' : 'js'
     if (!(await isEmpty(project_path))) {
-        // log.error('cannot create folder ' + project_name)
-        // return log.warn(`path ${project_path} already exists and not empty`)
+        log.error('cannot create folder ' + project_name)
+        return log.warn(`path ${project_path} already exists and not empty`)
     }
     if (!fs.existsSync(project_path)) {
         fs.mkdirSync(project_name)
     }
-    log.info('init project, please wait ...')
-    templates = walk(path.resolve(templatePath), function (err, results) {
+    log.warn('init project, please wait ...')
+    templates = walk(path.resolve(templatePath, mode), function (err, results) {
         if (err) throw err;
         results.forEach((dir) => {
-            let target = dir.replace('.x', '').replace(templatePath + path.sep, '')
+            let target = dir.replace('.x', '').replace(templatePath + path.sep + mode + path.sep, '')
             let content = ""
             eval("content = " + fs.readFileSync(dir))
             let full_target = path.resolve(project_path, target)
@@ -27,6 +39,7 @@ const create = async function ([project_name]) {
             log.info('generate ' + full_target)
             fs.writeFileSync(full_target, content)
         })
+        log.success('SUCCESS: napim ready, cd ' + project_name + ' and start your code!')
     })
 }
 const missingArg = function () {
