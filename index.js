@@ -38,11 +38,11 @@ if (isOption(args[0])) {
 
 let match_option = options.find(o => o.code == opt || o.alias == opt)
 let match_argument = arguments.find(o => o.code == arg)
-params = args.filter((x, i) => i > 0 && x != match_argument.code)
 if (arg == null && match_option) {
     return optionActions[match_option.action]()
 }
 if (match_argument) {
+    params = args.filter((x, i) => i > 0 && x != match_argument.code)
     return argumentActions[match_argument.action](params)
 }
 return argumentActions.unknownArgument()
