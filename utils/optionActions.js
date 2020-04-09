@@ -12,10 +12,10 @@ const help = function () {
         '     or  napim [option]'])
     log.debug(['',
         'argument   :',
-        '   create [project_name] [-ts?]      create new api project',
+        '   init [project_name] [-ts?]        generate new api project',
         '                            -ts      typescript mode',
-        '   make:model [model_name]           create model',
-        '   make:service [route] [--method?]  create service',
+        '   make:model [model_name]           generate model',
+        '   make:service [route] [--method?]  generate service',
         '       example: ',
         '       make:service /users/:id --post',
         '       ..will generate /users/post_id.(ts|js)',

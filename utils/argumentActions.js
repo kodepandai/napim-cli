@@ -3,7 +3,7 @@ const path = require('path')
 const { basePath, templatePath } = require('./path')
 const { isEmpty, isOption } = require('./functions')
 const fs = require('fs')
-const create = async function (params) {
+const init = async function (params) {
     if (params.length > 2 || params.length == 0) {
         log.warn('invalid argument or option')
         return log.info('Expected: napim create [project_name] [-ts?]')
@@ -73,4 +73,4 @@ var walk = function (dir, done) {
     });
 };
 
-module.exports = { create, unknownArgument, missingArg }
+module.exports = { init, unknownArgument, missingArg }

@@ -21,8 +21,8 @@ var options = [
 ]
 var arguments = [
     {
-        code: 'create',
-        action: 'create'
+        code: 'init',
+        action: 'init'
     }
 ]
 let arg = null
