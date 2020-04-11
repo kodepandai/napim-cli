@@ -23,6 +23,10 @@ var arguments = [
     {
         code: 'init',
         action: 'init'
+    },
+    {
+        code: 'make',
+        action: 'make'
     }
 ]
 let arg = null
@@ -37,12 +41,12 @@ if (isOption(args[0])) {
 }
 
 let match_option = options.find(o => o.code == opt || o.alias == opt)
-let match_argument = arguments.find(o => o.code == arg)
+let match_argument = arguments.find(o => o.code == arg || o.code == arg.split(':')[0])
 if (arg == null && match_option) {
     return optionActions[match_option.action]()
 }
 if (match_argument) {
     params = args.filter((x, i) => i > 0 && x != match_argument.code)
-    return argumentActions[match_argument.action](params)
+    return argumentActions[match_argument.action](params, arg)
 }
-return argumentActions.unknownArgument()
+return argumentActions.invalidArgument()

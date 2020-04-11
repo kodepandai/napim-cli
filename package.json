@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://gitlab.com/axmad386/napim-cli/issues"
   },
-  "homepage": "https://gitlab.com/axmad386/napim-cli#readme"
+  "homepage": "https://gitlab.com/axmad386/napim-cli#readme",
+  "dependencies": {}
 }

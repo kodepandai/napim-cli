@@ -1,7 +1,7 @@
 `\`import { IService } from 'napim'
 
 const \${service_name}: IService = {
-    method: [\${method}]
+    method: \${method},
     transaction: false,
     prepare: (input, trx) => {
         return input

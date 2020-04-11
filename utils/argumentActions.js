@@ -1,6 +1,6 @@
 const log = require('./customLog')
 const path = require('path')
-const { basePath, templatePath } = require('./path')
+const { basePath, templatePath, stubPath, dotEnv } = require('./path')
 const { isEmpty, isOption } = require('./functions')
 const fs = require('fs')
 const init = async function (params) {
@@ -39,15 +39,43 @@ const init = async function (params) {
             log.info('generate ' + full_target)
             fs.writeFileSync(full_target, content)
         })
-        log.success('SUCCESS: napim ready, cd ' + project_name + ' and start your code!')
+        return log.success('SUCCESS: napim ready, cd ' + project_name + ' and start your code!')
     })
+}
+
+const make = function (params, arg) {
+    let mode = dotEnv('TS') == 'true' ? 'ts' : 'js'
+    let json = {}
+    if (params.length == 0) {
+        return invalidArgument()
+    }
+    try {
+        json = require(path.resolve(basePath, 'package.json'))
+        if (json.dependencies && json.dependencies.napim) {
+            if (arg.split(':').length != 2) return invalidArgument()
+            let module = arg.split(':')[1]
+            if (isOption(params[0])) return invalidArgument()
+            if (!['service', 'middleware', 'model'].includes(module)) return invalidArgument()
+            checkStub(module, mode)
+            return generateModule(module, mode, params)
+
+        } else {
+            throw new Error
+        }
+
+    } catch (error) {
+        log.error(error.message)
+        return log.warn('WARN: napim not detected, please run this command on your root project')
+    }
+    return
 }
 const missingArg = function () {
     log.warn('WARN: missing argument')
-    log.info('napim -h for more info')
+    return log.info('napim -h for more info')
 }
-const unknownArgument = function () {
-    log.error('unknown argument, use napim -h for more info')
+const invalidArgument = function () {
+    log.warn('WARN: invalid argument')
+    return log.info('napim -h for more info')
 }
 
 var walk = function (dir, done) {
@@ -73,4 +101,67 @@ var walk = function (dir, done) {
     });
 };
 
-module.exports = { init, unknownArgument, missingArg }
+var checkStub = function (module, mode) {
+    if (!fs.existsSync(path.resolve(stubPath, module + '.napim'))) {
+        let content = ""
+        eval("content = " + fs.readFileSync(path.resolve(templatePath + path.sep + mode, 'stub' + path.sep + module + '.napim.x')))
+        fs.writeFileSync(path.resolve(stubPath, module + '.napim'), content)
+    }
+}
+
+var generateModule = function (module, mode, params) {
+    var methods = []
+    var tag = 'default'
+    if (module == 'service' && params.length >= 2) {
+        params.forEach((p) => {
+            if (isOption(p)) {
+                if (['post', 'get', 'put', 'delete', 'patch'].includes(p.replace('--', ''))) {
+                    methods.push(p.replace('--', ''))
+                }
+                if (p.includes('--tag')) {
+                    tag = p.replace('--tag=', '')
+                }
+            }
+        })
+    }
+    let method = JSON.stringify(methods)
+    let target_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
+    let file = path.resolve(target_path, params[0].replace(':', '_') + '.' + mode)
+    if (fs.existsSync(file)) {
+        return log.warn('WARN: module with name ' + path.basename(file) + ' already exists!')
+    }
+    if (!fs.existsSync(path.dirname(file))) {
+        fs.mkdirSync(path.dirname(file), { recursive: true })
+    }
+    eval(`var ${module}_name = '${path.basename(file).replace('.' + mode, '')}'`)
+    eval("var content = " + fs.readFileSync(path.resolve(stubPath, module + '.napim')))
+    fs.writeFileSync(file, content)
+    if (module == 'service') {
+        let router_path = path.resolve(basePath, (dotEnv('ROUTER') || 'router.json'))
+        if (!fs.existsSync(path.dirname(router_path))) {
+            fs.mkdirSync(path.dirname(router_path))
+        }
+        let router = require(router_path)
+        let routerIndex = router.findIndex(x => x.tag == tag)
+        if (routerIndex == -1) {
+            router = router.concat({
+                "tag": tag,
+                "prefix": "",
+                "middleware": [],
+                "get": [],
+                "post": []
+            })
+            routerIndex = router.length - 1
+        }
+        methods.forEach(m => {
+            if (!router[routerIndex][m]) {
+                router[routerIndex][m] = []
+            }
+            router[routerIndex][m].push(params[0])
+        })
+        fs.writeFileSync(router_path, JSON.stringify(router, null, 4))
+    }
+
+}
+
+module.exports = { init, make, invalidArgument, missingArg }

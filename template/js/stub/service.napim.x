@@ -1,5 +1,5 @@
 `\`const \${service_name} = {
-    method: [\${method}]
+    method: \${method},
     transaction: false,
     prepare: (input, trx) => {
         return input
