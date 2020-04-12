@@ -123,23 +123,21 @@ var generateModule = function (module, mode, params) {
                 }
             }
         })
+        if (methods.length > 1) return invalidArgument()
     }
+
     let method = JSON.stringify(methods)
-    let target_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
-    let file = path.resolve(target_path, params[0].replace(':', '_') + '.' + mode)
-    if (fs.existsSync(file)) {
-        return log.warn('WARN: module with name ' + path.basename(file) + ' already exists!')
-    }
-    if (!fs.existsSync(path.dirname(file))) {
-        fs.mkdirSync(path.dirname(file), { recursive: true })
-    }
-    eval(`var ${module}_name = '${path.basename(file).replace('.' + mode, '')}'`)
-    eval("var content = " + fs.readFileSync(path.resolve(stubPath, module + '.napim')))
-    fs.writeFileSync(file, content)
+    let module_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
+    let file = path.resolve(module_path, params[0].replace(':', '_') + '.' + mode)
+
     if (module == 'service') {
         let router_path = path.resolve(basePath, (dotEnv('ROUTER') || 'router.json'))
         if (!fs.existsSync(path.dirname(router_path))) {
             fs.mkdirSync(path.dirname(router_path))
+        }
+        if (!fs.existsSync(router_path)) {
+            eval("var router_content = " + fs.readFileSync(path.resolve(templatePath + path.sep + mode + path.sep + 'router.json.x')))
+            fs.writeFileSync(router_path, router_content)
         }
         let router = require(router_path)
         let routerIndex = router.findIndex(x => x.tag == tag)
@@ -153,14 +151,38 @@ var generateModule = function (module, mode, params) {
             })
             routerIndex = router.length - 1
         }
-        methods.forEach(m => {
-            if (!router[routerIndex][m]) {
-                router[routerIndex][m] = []
-            }
-            router[routerIndex][m].push(params[0])
+        let m = methods[0]
+        if (!router[routerIndex][m]) {
+            router[routerIndex][m] = []
+        }
+        let prefix = router[routerIndex].prefix
+        if (router.findIndex(x => x.prefix == prefix && x[m].findIndex(o => o.path == params[0]) > -1) > -1) {
+            return log.warn(`WARN: route ${params[0]} with prefix ${JSON.stringify(prefix)} already exists`)
+        }
+        let arr = params[0].replace(':', '_').split('/')
+        arr[arr.length - 1] = arr[arr.length - 1] + '_' + m
+        let service_path = arr.join('/')
+        router[routerIndex][m].push({
+            path: params[0],
+            service: service_path
         })
+        file = path.resolve(module_path, service_path + '.' + mode)
+        if (fs.existsSync(file)) {
+            return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
+        }
         fs.writeFileSync(router_path, JSON.stringify(router, null, 4))
     }
+    if (fs.existsSync(file)) {
+        return log.warn('WARN: ' + module + ' with name ' + path.basename(file) + ' already exists!')
+    }
+    if (!fs.existsSync(path.dirname(file))) {
+        fs.mkdirSync(path.dirname(file), { recursive: true })
+    }
+    eval(`var ${module}_name = '${path.basename(file).replace('.' + mode, '')}'`)
+    eval("var content = " + fs.readFileSync(path.resolve(stubPath, module + '.napim')))
+    log.info('...generating ' + module)
+    fs.writeFileSync(file, content)
+    return log.success('SUCCESS: ' + module + " generated: " + file.replace(module_path, ''))
 
 }
 
