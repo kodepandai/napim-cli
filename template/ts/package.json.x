@@ -11,6 +11,7 @@
     "nodemon": "^2.0.2"
   },
   "scripts": {
+    "build": "rm -rf dist && tsc",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
