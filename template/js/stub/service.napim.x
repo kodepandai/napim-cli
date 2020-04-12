@@ -1,7 +1,7 @@
 `\`const \${service_name} = {
     method: \${method},
     transaction: false,
-    prepare: (input, trx) => {
+    prepare: async (input, trx) => {
         return input
     },
     process: async (input, originalInput, trx) => {
