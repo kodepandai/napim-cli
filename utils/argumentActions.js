@@ -162,11 +162,9 @@ var generateModule = function (module, mode, params) {
         let arr = params[0].replace(':', '_').split('/')
         arr[arr.length - 1] = arr[arr.length - 1] + '_' + m
         let service_path = arr.join('/')
-        if (params[0][0] != '/') { params[0] = "/" + params[0] }
-        if (service_path[0] != '/') { service_path = "/" + service_path }
         router[routerIndex][m].push({
-            path: params[0],
-            service: service_path
+            path: params[0][0] == '/' ? params[0] : "/" + params[0],
+            service: service_path[0] == '/' ? service_path : "/" + service_path
         })
         file = path.resolve(module_path, service_path + '.' + mode)
         if (fs.existsSync(file)) {
