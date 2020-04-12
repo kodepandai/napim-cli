@@ -4,7 +4,7 @@
   "description": "description of the project",
   "main": "index.js",
   "dependencies": {
-    "napim": "^1.0.0-beta.3"
+    "napim": "^1.0.0-beta.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
