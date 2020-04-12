@@ -1,6 +1,6 @@
 {
   "name": "napim-cli",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "command line for napim (Node Api Maker)",
   "main": "index.js",
   "scripts": {
