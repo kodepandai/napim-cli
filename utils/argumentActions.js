@@ -110,7 +110,7 @@ var checkStub = function (module, mode) {
 }
 
 var generateModule = function (module, mode, params) {
-    var methods = ['get']
+    var methods = []
     var tag = 'default'
     if (module == 'service' && params.length >= 2) {
         params.forEach((p) => {
@@ -123,6 +123,9 @@ var generateModule = function (module, mode, params) {
                 }
             }
         })
+        if (methods.length == 0) {
+            methods.push('get')
+        }
         if (methods.length > 1) return invalidArgument()
     }
 
