@@ -123,11 +123,11 @@ var generateModule = function (module, mode, params) {
                 }
             }
         })
-        if (methods.length == 0) {
-            methods.push('get')
-        }
-        if (methods.length > 1) return invalidArgument()
     }
+    if (methods.length == 0) {
+        methods.push('get')
+    }
+    if (methods.length > 1) return invalidArgument()
 
     let method = JSON.stringify(methods)
     let module_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
@@ -173,7 +173,6 @@ var generateModule = function (module, mode, params) {
             service: service_path
         })
         file = path.resolve(module_path, service_path + '.' + mode)
-        log.info(file)
         if (fs.existsSync(file)) {
             return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
         }
