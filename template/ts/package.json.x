@@ -8,7 +8,9 @@
     "napim": "^1.0.0-beta.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "@types/express": "^4.17.4",
+    "nodemon": "^2.0.2",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
