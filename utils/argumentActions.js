@@ -6,14 +6,14 @@ const fs = require('fs')
 const init = async function (params) {
     if (params.length > 2 || params.length == 0) {
         log.warn('invalid argument or option')
-        return log.info('Expected: napim create [project_name] [-ts?]')
+        return log.info('Expected: napim init [project_name] [-ts?]')
     }
     if (isOption(params[0])) return log.warn('invalid project name')
     let project_name = params[0]
     let option = params.length == 2 && isOption(params[1]) ? params[1] : null
     if (option != null && option != '-ts') {
         log.warn('invalid argument or option')
-        return log.info('Expected: napim create [project_name] [-ts?]')
+        return log.info('Expected: napim init [project_name] [-ts?]')
     }
     let project_path = path.resolve(basePath, project_name)
     let mode = option ? 'ts' : 'js'
@@ -110,7 +110,7 @@ var checkStub = function (module, mode) {
 }
 
 var generateModule = function (module, mode, params) {
-    var methods = []
+    var methods = ['get']
     var tag = 'default'
     if (module == 'service' && params.length >= 2) {
         params.forEach((p) => {

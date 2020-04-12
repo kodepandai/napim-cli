@@ -41,7 +41,9 @@ if (isOption(args[0])) {
 }
 
 let match_option = options.find(o => o.code == opt || o.alias == opt)
-let match_argument = arguments.find(o => o.code == arg || o.code == arg.split(':')[0])
+if (arg) {
+    var match_argument = arguments.find(o => o.code == arg || o.code == arg.split(':')[0])
+}
 if (arg == null && match_option) {
     return optionActions[match_option.action]()
 }

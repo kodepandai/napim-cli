@@ -18,7 +18,7 @@ const help = function () {
         '   make:service [route] [--method?]  generate service',
         '       example: ',
         '       make:service /users/:id --post',
-        '       ..will generate /users/post_id.(ts|js)',
+        '       ..will generate /users/_id_post.(ts|js)',
 
         '',
         'option   :',
