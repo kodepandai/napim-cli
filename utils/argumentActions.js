@@ -161,12 +161,16 @@ var generateModule = function (module, mode, params) {
         }
         let arr = params[0].replace(':', '_').split('/')
         arr[arr.length - 1] = arr[arr.length - 1] + '_' + m
+        if (arr[0] == '') {
+            arr.splice(0, 1)
+        }
         let service_path = arr.join('/')
         router[routerIndex][m].push({
             path: params[0][0] == '/' ? params[0] : "/" + params[0],
-            service: service_path[0] == '/' ? service_path : "/" + service_path
+            service: service_path
         })
         file = path.resolve(module_path, service_path + '.' + mode)
+        log.info(file)
         if (fs.existsSync(file)) {
             return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
         }
