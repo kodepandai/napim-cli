@@ -150,7 +150,10 @@ var generateModule = function (module, mode, params) {
                 "prefix": "",
                 "middleware": [],
                 "get": [],
-                "post": []
+                "post": [],
+                "put": [],
+                "delete": [],
+                "patch": []
             })
             routerIndex = router.length - 1
         }
