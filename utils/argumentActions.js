@@ -171,6 +171,10 @@ var generateModule = function (module, mode, params) {
             arr.splice(0, 1)
         }
         let service_path = arr.join('/')
+        if (service_path.split('/').length == 1) {
+            //if service doesn't have sub, make it as index
+            service_path = service_path.replace('_', '/index_')
+        }
         router[routerIndex][m].push({
             path: params[0][0] == '/' ? params[0] : "/" + params[0],
             service: '/' + service_path
@@ -179,6 +183,7 @@ var generateModule = function (module, mode, params) {
         if (fs.existsSync(file)) {
             return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
         }
+        console.log(service_path);
         fs.writeFileSync(router_path, JSON.stringify(router, null, 4))
     }
     if (fs.existsSync(file)) {

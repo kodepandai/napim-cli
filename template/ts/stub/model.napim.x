@@ -1,7 +1,8 @@
 `\`import { v4 as uuidv4 } from 'uuid'
-import { Model, JSONSchema } from 'objection'
+import {JSONSchema } from 'objection'
+import BaseModel from './BaseModel'
 
-class \${model_name} extends Model {
+class \${model_name} extends BaseModel {
     uid!: string
 
     static get tableName() {
@@ -14,8 +15,7 @@ class \${model_name} extends Model {
             properties: {
                 uid: {
                     type: 'string',
-                    format: 'uuid',
-                    default: uuidv4()
+                    format: 'uuid'
                 }
             },
             required: []

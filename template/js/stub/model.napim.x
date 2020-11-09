@@ -1,5 +1,7 @@
 `\`const { v4 as uuidv4 } = require('uuid')
 const { Model, JSONSchema } = require('objection')
+const BaseModel  = require('./BaseModel')
+
 
 class \${model_name} extends Model {
 
@@ -13,13 +15,12 @@ class \${model_name} extends Model {
             properties: {
                 uid: {
                     type: 'string',
-                    format: 'uuid',
-                    default: uuidv4()
+                    format: 'uuid'
                 }
             },
             required: []
         }
     }
 }
-export default \${model_name}
+module.exports =  \${model_name}
 \``

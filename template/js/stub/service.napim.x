@@ -1,6 +1,7 @@
 `\`const \${service_name} = {
     method: \${method},
     transaction: false,
+    middleware: [],
     prepare: async (input, trx) => {
         return input
     },
