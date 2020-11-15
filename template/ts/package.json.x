@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "dependencies": {
-    "napim": "^1.0.0"
+    "napim": "^2.0.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.4",
@@ -15,8 +15,8 @@
   "scripts": {
     "watch": "tsc -w & nodemon -q -w dist dist/index.js --ignore log",
     "build": "rm -rf dist && tsc",
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "tsc -w & nodemon -q -w dist dist/index.js",
+    "start": "node dist/index.js"
   },
   "author": "",
   "license": "ISC"

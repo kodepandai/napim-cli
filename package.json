@@ -1,17 +1,18 @@
 {
   "name": "napim-cli",
-  "version": "1.0.1",
+  "version": "2.0.1",
   "description": "command line for napim (Node Api Maker)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "bin": {
     "napim": "./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/axmad386/napim-cli.git"
+    "url": "git+https://github.com/axmad386/napim-cli.git"
   },
   "keywords": [
     "cli",
@@ -22,6 +23,9 @@
   "bugs": {
     "url": "https://gitlab.com/axmad386/napim-cli/issues"
   },
-  "homepage": "https://gitlab.com/axmad386/napim-cli#readme",
-  "dependencies": {}
+  "homepage": "https://github.com/axmad386/napim-cli#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "auto-changelog": "^2.2.1"
+  }
 }
