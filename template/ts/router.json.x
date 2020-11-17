@@ -4,7 +4,10 @@
         "prefix": "/api",
         "middleware": [],
         "get": [],
-        "post": []
+        "post": [],
+        "put": [],
+        "delete": [],
+        "patch": []
     }
 ]
 `

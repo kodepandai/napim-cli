@@ -129,7 +129,7 @@ var generateModule = function (module, mode, params) {
     }
     if (methods.length > 1) return invalidArgument()
 
-    let method = JSON.stringify(methods)
+    let method = JSON.stringify(methods) //for service stub
     let module_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
     let file = path.resolve(module_path, params[0].replace(':', '_') + '.' + mode)
 
@@ -162,7 +162,7 @@ var generateModule = function (module, mode, params) {
             router[routerIndex][m] = []
         }
         let prefix = router[routerIndex].prefix
-        if (router.findIndex(x => x.prefix == prefix && x[m].findIndex(o => o.path == params[0]) > -1) > -1) {
+        if (router.findIndex(x => x.prefix == prefix && x[m]?.findIndex(o => o.path == params[0]) > -1) > -1) {
             return log.warn(`WARN: route ${params[0]} with prefix ${JSON.stringify(prefix)} already exists`)
         }
         let arr = params[0].replace(':', '_').split('/')
