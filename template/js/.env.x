@@ -1,6 +1,6 @@
 `DEBUG=true
 SERVICE_PATH=service
-ROUTER=router.json
+ROUTER=router.js
 LOG_PATH=log
 MIDDLEWARE_PATH=middleware
 MODEL_PATH=model

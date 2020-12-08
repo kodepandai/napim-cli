@@ -1,4 +1,4 @@
-`[
+`module.exports = [
     {
         "tag": "default",
         "prefix": "/api",

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "src/index.ts",
   "dependencies": {
-    "napim": "^2.0.4"
+    "napim": "^2.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.4",

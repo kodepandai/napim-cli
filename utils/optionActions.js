@@ -1,4 +1,6 @@
 const log = require('./customLog')
+const path = require('path')
+const { basePath } = require('./path')
 const help = function () {
     log.info([
         'Node API Maker CLI',
@@ -27,8 +29,11 @@ const help = function () {
     ])
 }
 const version = function () {
-    let ver = require('../package.json').version
-    log.info('Node API Maker version ' + ver)
+    let json = require(path.resolve(basePath, 'package.json'))
+    if (json && json.dependencies.napim) {
+        log.info('Node API Maker version ' + json.dependencies.napim.replace('^', ''))
+    }
+    log.info('Node API Maker CLI version ' + require('../package.json').version)
 }
 
 module.exports = { help, version }

@@ -24,7 +24,9 @@
     "url": "https://gitlab.com/axmad386/napim-cli/issues"
   },
   "homepage": "https://github.com/axmad386/napim-cli#readme",
-  "dependencies": {},
+  "dependencies": {
+    "lodash.camelcase": "^4.3.0"
+  },
   "devDependencies": {
     "auto-changelog": "^2.2.1"
   }

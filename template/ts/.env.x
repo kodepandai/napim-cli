@@ -2,7 +2,7 @@
 DEBUG=true
 SERVICE_PATH=dist/service
 SERVICE_PATH_TS=src/service
-ROUTER=router.json
+ROUTER=router.js
 LOG_PATH=log
 MIDDLEWARE_PATH=dist/middleware
 MIDDLEWARE_PATH_TS=src/middleware

@@ -1,3 +1,4 @@
+const camelCase = require('lodash.camelcase')
 const log = require('./customLog')
 const path = require('path')
 const { basePath, templatePath, stubPath, dotEnv } = require('./path')
@@ -134,12 +135,12 @@ var generateModule = function (module, mode, params) {
     let file = path.resolve(module_path, params[0].replace(':', '_') + '.' + mode)
 
     if (module == 'service') {
-        let router_path = path.resolve(basePath, (dotEnv('ROUTER') || 'router.json'))
+        let router_path = path.resolve(basePath, (dotEnv('ROUTER') || 'router.js'))
         if (!fs.existsSync(path.dirname(router_path))) {
             fs.mkdirSync(path.dirname(router_path))
         }
         if (!fs.existsSync(router_path)) {
-            eval("var router_content = " + fs.readFileSync(path.resolve(templatePath + path.sep + mode + path.sep + 'router.json.x')))
+            eval("var router_content = " + fs.readFileSync(path.resolve(templatePath + path.sep + mode + path.sep + 'router.js.x')))
             fs.writeFileSync(router_path, router_content)
         }
         let router = require(router_path)
@@ -162,19 +163,21 @@ var generateModule = function (module, mode, params) {
             router[routerIndex][m] = []
         }
         let prefix = router[routerIndex].prefix
-        if (router.findIndex(x => x.prefix == prefix && x[m]?.findIndex(o => o.path == params[0]) > -1) > -1) {
-            return log.warn(`WARN: route ${params[0]} with prefix ${JSON.stringify(prefix)} already exists`)
+        let checkedPath = params[0][0] == '/' ? params[0] : '/' + params[0]
+        if (router.findIndex(x => x.prefix == prefix && x[m]?.findIndex(o => o.path == checkedPath) > -1) > -1) {
+            return log.warn(`WARN: route ${checkedPath} with prefix ${JSON.stringify(prefix)} already exists`)
         }
         let arr = params[0].replace(':', '_').split('/')
-        arr[arr.length - 1] = arr[arr.length - 1] + '_' + m
+        if (arr[arr.length - 1][0] == '_') {
+            arr[arr.length - 1] = m + '_' + arr[arr.length - 2] + '_by' + arr[arr.length - 1]
+        } else {
+            arr[arr.length] = m + '_' + arr[arr.length - 1]
+        }
         if (arr[0] == '') {
             arr.splice(0, 1)
         }
+        arr[arr.length - 1] = camelCase(arr[arr.length - 1])
         let service_path = arr.join('/')
-        if (service_path.split('/').length == 1) {
-            //if service doesn't have sub, make it as index
-            service_path = service_path.replace('_', '/index_')
-        }
         router[routerIndex][m].push({
             path: params[0][0] == '/' ? params[0] : "/" + params[0],
             service: '/' + service_path
@@ -183,8 +186,7 @@ var generateModule = function (module, mode, params) {
         if (fs.existsSync(file)) {
             return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
         }
-        console.log(service_path);
-        fs.writeFileSync(router_path, JSON.stringify(router, null, 4))
+        fs.writeFileSync(router_path, `module.exports = ${JSON.stringify(router, null, 4)}`)
     }
     if (fs.existsSync(file)) {
         return log.warn('WARN: ' + module + ' with name ' + path.basename(file) + ' already exists!')
@@ -192,7 +194,7 @@ var generateModule = function (module, mode, params) {
     if (!fs.existsSync(path.dirname(file))) {
         fs.mkdirSync(path.dirname(file), { recursive: true })
     }
-    eval(`var ${module}_name = '${path.basename(file).replace('.' + mode, '')}'`)
+    eval(`var ${module}_name = '${camelCase(path.basename(file).replace('.' + mode, ''))}'`)
     eval("var content = " + fs.readFileSync(path.resolve(stubPath, module + '.napim')))
     log.info('...generating ' + module)
     fs.writeFileSync(file, content)
