@@ -5,7 +5,7 @@ const basePath = path.resolve(process.cwd())
 
 const dotEnv = function (key) {
     try {
-        let env = fs.readFileSync(path.resolve(basePath, '.env'), 'utf8').split('\n').filter(x => x != '')
+        let env = fs.readFileSync(path.resolve(basePath, '.env'), 'utf8').split('\n').filter(x => x != '' && !x.includes('#'))
         let envMap = {}
         env.map((o) => {
             envMap[o.trim().split('=')[0]] = o.trim().split('=')[1]

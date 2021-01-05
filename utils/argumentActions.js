@@ -131,7 +131,7 @@ var generateModule = function (module, mode, params) {
     if (methods.length > 1) return invalidArgument()
 
     let method = JSON.stringify(methods) //for service stub
-    let module_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + mode == 'ts' ? '_TS' : '') || mode == 'ts' ? 'src' + path.sep + module : module))
+    let module_path = path.resolve(basePath, (dotEnv(module.toUpperCase() + '_PATH' + (mode == 'ts' ? '_TS' : '')) || (mode == 'ts' ? 'src' + path.sep + module : module)))
     let file = path.resolve(module_path, params[0].replace(':', '_') + '.' + mode)
 
     if (module == 'service') {
