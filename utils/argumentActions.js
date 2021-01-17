@@ -194,7 +194,7 @@ var generateModule = function (module, mode, params) {
     if (!fs.existsSync(path.dirname(file))) {
         fs.mkdirSync(path.dirname(file), { recursive: true })
     }
-    eval(`var ${module}_name = '${camelCase(path.basename(file).replace('.' + mode, ''))}'`)
+    eval(`var ${module}_name = '${module == 'service' ? camelCase(path.basename(file).replace('.' + mode, '')) : path.basename(file).replace('.' + mode, '')}'`)
     eval("var content = " + fs.readFileSync(path.resolve(stubPath, module + '.napim')))
     log.info('...generating ' + module)
     fs.writeFileSync(file, content)
