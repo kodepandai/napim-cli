@@ -186,7 +186,7 @@ var generateModule = function (module, mode, params) {
         if (fs.existsSync(file)) {
             return log.warn('WARN: service ' + service_path + '.' + mode + ' already exists!')
         }
-        fs.writeFileSync(router_path, `module.exports = ${JSON.stringify(router, null, 4)}`)
+        fs.writeFileSync(router_path, `${router_path.includes('json') ? '' : 'module.exports = '}${JSON.stringify(router, null, 4)}`)
     }
     if (fs.existsSync(file)) {
         return log.warn('WARN: ' + module + ' with name ' + path.basename(file) + ' already exists!')
